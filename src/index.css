@@ -29,4 +29,8 @@ main{
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+form{
+  display: flex;
+  flex-direction: column;
+}
 

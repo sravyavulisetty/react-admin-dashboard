@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { Sidebar as ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
-// import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import user from '../../assets/woman-profile-cartoon_18591-58480.avif';
 import { tokens } from "../../theme";
@@ -24,9 +23,8 @@ const Item = ({title, to, selected, icon, setSelected}) =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
-        <MenuItem active={selected === title} style={{color: colors.grey[100]}} onClick={()=>setSelected(title)} icon={icon}>
+        <MenuItem active={selected === title} style={{color: colors.grey[100]}} onClick={()=>setSelected(title)} icon={icon} component={<Link to={to}></Link>}>
             <Typography>{title}</Typography>
-            <Link to={to}></Link>
         </MenuItem>
     )
 }
@@ -65,7 +63,7 @@ function Sidebar() {
             {!isCollapsed && (
                 <Box mb='18px'>
                     <Box display="flex" justifyContent="center" alignItems="center">
-                        <img alt='profile user' width='100px' height='100px' src={user} style={{cursor: 'pointer', borderRadius: '50%'}}/>  
+                        <img alt='profile user' width='90px' height='90px' src={user} style={{cursor: 'pointer', borderRadius: '50%'}}/>  
                     </Box>
                     <Box textAlign='center'>
                         <Typography variant='h2' color={colors.grey[100]} fontWeight='bold' sx={{m: '10px 0 0 0'}}>Sravya</Typography>
@@ -94,4 +92,4 @@ function Sidebar() {
    </Box>
   )
 }
-export default Sidebar
+export default Sidebar;

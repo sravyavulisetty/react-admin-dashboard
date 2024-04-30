@@ -13,7 +13,7 @@ import Form from './pages/form';
 // import Pie from "../src/pages/pie";
 // import FAQ from "../src/pages/faq";
 // import Geography from "../src/pages/geography";
-// import Calendar from "../src/pages/calendar";
+import Calendar from "../src/pages/calendar";
 import Sidebar from './pages/global/Sidebar';
 import Dashboard from './pages/dashboard';
 function App() {
@@ -37,7 +37,7 @@ function App() {
           {/* <Route path="/pie" element={<Pie/>}/> */}
           {/* <Route path="/faq" element={<FAQ/>}/> */}
           {/* <Route path="/geography" element={<Geography/>}/> */}
-          {/* <Route path="/calendar" element={<Calendar/>}/> */}
+          <Route path="/calendar" element={<Calendar/>}/>
           </Routes>
         </main>
       </div>

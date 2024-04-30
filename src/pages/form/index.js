@@ -48,7 +48,6 @@ const Form = () => {
 							display="grid"
 							gridTemplateColumns="repeat(4, minmax(0, 1fr))"
 							gap="30px">
-							{/* sx={{"& > div": { gridColumn: isNonMobile ? undefined : "span 4"}}}> */}
 							<TextField
 								fullWidth
 								variant="filled"
@@ -103,14 +102,14 @@ const Form = () => {
 							<TextField
 								fullWidth
 								variant="filled"
-								label="Address 1"
-								value={values.address1}
+								label="Address"
+								value={values.address}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								type="text"
-								name="address1"
-                                error={!!touched.address1 && !!errors.address1}
-                                helperText={touched.address1 && errors.address1}
+								name="address"
+                                error={!!touched.address && !!errors.address}
+                                helperText={touched.address && errors.address}
                                 sx={{ gridColumn: "span 4"}}
 							/>
 						</Box>

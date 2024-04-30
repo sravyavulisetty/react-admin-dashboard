@@ -66,7 +66,7 @@ function Sidebar() {
                         <img alt='profile user' width='90px' height='90px' src={user} style={{cursor: 'pointer', borderRadius: '50%'}}/>  
                     </Box>
                     <Box textAlign='center'>
-                        <Typography variant='h2' color={colors.grey[100]} fontWeight='bold' sx={{m: '10px 0 0 0'}}>Sravya</Typography>
+                        <Typography variant='h2' color={colors.grey[100]} fontWeight='bold' sx={{m: '10px 0 0 0', letterSpacing: "1px"}}>Sravya</Typography>
                         <Typography variant='h5' color={colors.greenAccent[500]} sx={{m: '5px 0 0 0'}}>ADMIN</Typography>
                     </Box>
                 </Box>

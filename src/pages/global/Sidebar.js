@@ -41,7 +41,7 @@ function Sidebar() {
             onClick={()=>setIsCollapsed(!isCollapsed)} 
             icon={isCollapsed ? <MenuOutlinedIcon/> : ''}
             style={{
-                margin: '10px 0px 20px 0px',
+                margin: '10px 0px 10px 0px',
                 color: colors.grey[100]
             }}
             >
@@ -61,7 +61,7 @@ function Sidebar() {
                 )}
             </MenuItem>
             {!isCollapsed && (
-                <Box mb='18px'>
+                <Box mb='10px'>
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <img alt='profile user' width='90px' height='90px' src={user} style={{cursor: 'pointer', borderRadius: '50%'}}/>  
                     </Box>
@@ -73,14 +73,14 @@ function Sidebar() {
             )}
             <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                 <Item title='Dashboard' to='/' icon={<HomeOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Data</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Data</Typography>
                 <Item title='Manage Team' to='/team' icon={<PeopleOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Contacts' to='/contacts' icon={<ContactsOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Invoice Balances' to='/invoices' icon={<ReceiptOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Pages</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Pages</Typography>
                 <Item title='Profile Form' to='/form' icon={<PersonOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='FAQ Page' to='/faq' icon={<HelpOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Charts</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Charts</Typography>
                 <Item title='Bar Chart' to='/bar' icon={<BarChartOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Pie Chart' to='/pie' icon={<PieChartOutlineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Line Chart' to='/line' icon={<TimelineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>

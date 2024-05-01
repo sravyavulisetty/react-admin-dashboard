@@ -23,6 +23,7 @@ const Eventitem = ({event}) => {
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
   const [eventList, setEventList] = useState([]);
+  const [showEvents, setShowEvents] = useState(false);
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
   const numOfDays = differenceInDays(endDate, startDate) + 1;
@@ -39,20 +40,31 @@ const Calendar = () => {
     const result = add(date, {months: 1});
     setDate(result);
   }
-  let nextId = 1;
   const addEvent = (selectedDate) =>{
     let month = date.getMonth();
     let year = date.getFullYear();
     const title = prompt("Please enter a new title for your event");
     if(title!=="" && title !== null){
-      setEventList([...eventList, {id: nextId++ , title: title, date: format(new Date(year, month, selectedDate), "MMM dd, yyyy")}]);
+      setEventList([...eventList, {title: title, date: format(new Date(year, month, selectedDate), "MMM dd, yyyy")}]);
     }
   }
-  // useEffect(()=>{
-  //   let month = date.getMonth();
-  //   let year = date.getFullYear();
-  // },[date]);
-
+  const hasEvent = (index) => {
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    const event = eventList.filter((event) => {
+      return new Date(event.date).getTime() === new Date(year, month, index).getTime();
+    });
+    if (event) {
+      return event;
+    }
+  }
+  const deleteEvent = (index) => {
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    if(window.confirm("Are you sure you want to delete the event?")){
+      setEventList((eventList.filter((event)=> new Date(event.date).getTime() !== new Date(year, month, index).getTime())));
+    }
+  }
   return (
     <Box m="20px">
         <Header title="CALENDAR" subtitle="Full Calendar Interactive Page"></Header>
@@ -84,22 +96,33 @@ const Calendar = () => {
               </Box>
             </Box>
             <Box m="15px">
-            <Grid container spacing={1} columns={7}>
+            <Grid container spacing={1} columns={7} height="65vh">
               {weeks.map((week)=>(
-                <Grid key={week} xs={1} fontSize={16} fontWeight="bold" sx={{mb: "15px", textAlign: "center"}}>{week}</Grid>
+                <Grid key={week} xs={1} fontSize={16} fontWeight="bold" sx={{textAlign: "center"}}>{week}</Grid>
               ))}
               {Array.from({length: prefixDays}).map((_,index)=>(
-                <Grid key={index} xs={1} fontSize={16} sx={{border: "0.25px solid lightgray"}}></Grid>
+                <Grid key={index} xs={1} fontSize={14} sx={{border: "0.25px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
               ))}
               {Array.from({length: numOfDays}).map((_,index)=>(
-                <Grid key={index} xs={1} fontSize={15} sx={{border: "0.25px solid", p: "2px 8px 50px 50px", textAlign: "right", "&:active": {backgroundColor: "slategrey"}}} onClick={()=>addEvent(index+1)} display="flex" flexDirection="column">
-                  <Box>{ index+1 }</Box>
-                  <Box></Box>
+                <Grid key={index} xs={1} fontSize={14} sx={{height: "calc((100vh - 7 * 15px) / 7)",border: "0.25px solid", p: "2px", "&:active": {backgroundColor: "slategrey"}}} onClick={(e)=>addEvent(index+1,e)} display="flex" flexDirection="column">
+                  <Box textAlign = "right">{ index+1 }</Box>
+                  {hasEvent(index+1).length<=2 ? 
+                  hasEvent(index+1).map((event)=>(
+                    <Box sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px",marginTop: "5px", cursor: "pointer", overflow: "hidden", fontSize: "12px"}} onClick={(e) => {e.stopPropagation(); deleteEvent(index + 1)}}>{event.title}</Box>
+                  )) : <Box>
+                       <Box sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px", cursor: "pointer", overflow: "hidden", fontSize: "12px"}} onClick={(e) => {e.stopPropagation(); deleteEvent(index + 1)}}>{hasEvent(index+1)[0].title}</Box>
+                       <Button sx={{color: "white", textTransform: "lowercase !important", textAlign:"center"}}>+more</Button>
+                       {/* {showEvents ? 
+                       <Box bgcolor={'white'} color={'black'} zIndex="1000" minWidth="100%">
+                        {hasEvent(index+1).map((event)=>(
+                          <Box>{event.title}</Box>
+                        ))}
+                       </Box> : ""} */}
+                    </Box>}
                 </Grid>
-
               ))}
                {Array.from({length: suffixDays}).map((_,index)=>(
-                <Grid key={index} xs={1} fontSize={16} sx={{border: "0.25px solid lightgray"}}></Grid>
+                <Grid key={index} xs={1} fontSize={14} sx={{border: "0.25px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
               ))}
             </Grid>
             </Box>

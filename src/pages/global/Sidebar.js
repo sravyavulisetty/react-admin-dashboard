@@ -34,7 +34,7 @@ function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState('dashboard');
   return (
-   <Box>
+   <Box height="100vh" overflow="auto">
     <ProSidebar collapsed={isCollapsed} backgroundColor={`${colors.primary[400]}`}>
         <Menu iconShape="square">
             <MenuItem 

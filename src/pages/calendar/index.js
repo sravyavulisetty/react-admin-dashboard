@@ -1,5 +1,5 @@
 import { Box, IconButton, List, ListItem, ListItemText, Typography, Grid, Paper } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import Header from '../../components/Header';
 import {Button} from '@mui/material';
@@ -7,8 +7,8 @@ import { useTheme } from '@emotion/react';
 import { tokens } from '../../theme';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import { add, differenceInDays, endOfMonth, format, startOfMonth, sub } from 'date-fns';
-
+import { add, differenceInDays, endOfMonth, format, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays } from 'date-fns';
+import '../../index.css';
 const Eventitem = ({event}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -21,9 +21,12 @@ const Eventitem = ({event}) => {
   )
 }
 const Calendar = () => {
+  const ref = useRef(null);
   const [date, setDate] = useState(new Date());
   const [eventList, setEventList] = useState([]);
   const [showEvents, setShowEvents] = useState(false);
+  const [startDateofWeek, setStartDateofWeek] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [calType, setcalType] = useState("month");
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
   const numOfDays = differenceInDays(endDate, startDate) + 1;
@@ -32,6 +35,19 @@ const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const generateTimeSlotsForDay = () => {
+    const timeSlots = [];
+    for (let hour = 0; hour < 24; hour++) {
+      const timeSlot = new Date();
+      timeSlot.setHours(hour, 0, 0, 0); 
+      const formattedTime = timeSlot.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+      timeSlots.push(formattedTime);
+    }
+    return timeSlots;
+  };
+  const timeSlotsForDay = generateTimeSlotsForDay();
+  
   const prevMonth = () => {
     const result = sub(date, {months: 1});
     setDate(result);
@@ -58,15 +74,33 @@ const Calendar = () => {
       return event;
     }
   }
-  const deleteEvent = (index) => {
+  const deleteEvent = (index, title) => {
     let month = date.getMonth();
     let year = date.getFullYear();
-    if(window.confirm("Are you sure you want to delete the event?")){
-      setEventList((eventList.filter((event)=> new Date(event.date).getTime() !== new Date(year, month, index).getTime())));
+    if (window.confirm(`Are you sure you want to delete the event? ${title}`)) {
+      setEventList((eventList.filter((event) => 
+        !(new Date(event.date).getTime() === new Date(year, month, index).getTime() && event.title === title)
+      )));
     }
   }
+  const calculateWeekDates = () => {
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+      dates.push(format(addDays(startDateofWeek, i), 'MMM dd, yyyy'));
+    }
+    return dates;
+  };
+  const weekdays = calculateWeekDates();
+
+  const nextWeekDates = () => {
+    setStartDateofWeek(addDays(startDateofWeek, 7));
+  }
+  const previousWeekDates = () => {
+    setStartDateofWeek(subDays(startDateofWeek, 7));
+  }
+  
   return (
-    <Box m="20px">
+    <Box m="20px" ref={ref}>
         <Header title="CALENDAR" subtitle="Full Calendar Interactive Page"></Header>
         <Box display="flex" flexDirection="row" justifyContent="space-between" gap="20px" height="75vh" overflow="auto" >
           <Box sx={{backgroundColor: `${colors.primary[400]}`, p: '15px', borderRadius: "4px", flex: "1 1 20%", width: "15%", overflow: "auto"}}>
@@ -79,22 +113,23 @@ const Calendar = () => {
             <Box display="flex" justifyContent="space-between" flexDirection='row'>
               <Box display="flex" flexDirection="row" gap="15px">
               <Box sx={{backgroundColor: '#2c3e50', borderRadius:"3px", padding: 0}}>
-                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={prevMonth}>
+                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? prevMonth : calType === "week" ? previousWeekDates : ""}>
                   <ChevronLeftRoundedIcon sx={{fontSize: 25, color: "white"}}/>
                 </IconButton>
-                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={nextMonth}>
+                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? nextMonth : calType === "week" ? nextWeekDates : ""}>
                   <ChevronRightRoundedIcon sx={{fontSize: 25, color: "white"}}/>
                 </IconButton>
               </Box>
               <Button sx={{backgroundColor: '#2c3e50', borderRadius:"3px", color:"white", '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setDate(new Date())}>Today</Button>
               </Box>
-              <Typography variant='h3' fontWeight="bold">{format(date, "LLLL yyyy")}</Typography>
+              <Typography variant='h3' fontWeight="bold">{calType === "month" ? format(date, "LLLL yyyy"): calType === "week" ? format(new Date(weekdays[0]), "LLL d") + " - " + format(new Date(weekdays[weekdays.length-1]), "LLL d") + ", " + date.getFullYear() : ""}</Typography>
               <Box sx={{backgroundColor: '#2c3e50'}} display="flex" alignItems="center" borderRadius="3px" padding="4px">
-                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}}>month</Button>
-                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}}>week</Button>
-                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}}>day</Button>
+                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setcalType("month")}>month</Button>
+                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setcalType("week")}>week</Button>
+                <Button sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setcalType("day")}>day</Button>
               </Box>
             </Box>
+            {calType === "month" ? 
             <Box m="15px">
             <Grid container spacing={1} columns={7} height="65vh">
               {weeks.map((week)=>(
@@ -103,29 +138,86 @@ const Calendar = () => {
               {Array.from({length: prefixDays}).map((_,index)=>(
                 <Grid key={index} xs={1} fontSize={14} sx={{border: "0.25px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
               ))}
-              {Array.from({length: numOfDays}).map((_,index)=>(
-                <Grid key={index} xs={1} fontSize={14} sx={{height: "calc((100vh - 7 * 15px) / 7)",border: "0.25px solid", p: "2px", "&:active": {backgroundColor: "slategrey"}}} onClick={(e)=>addEvent(index+1,e)} display="flex" flexDirection="column">
-                  <Box textAlign = "right">{ index+1 }</Box>
-                  {hasEvent(index+1).length<=2 ? 
-                  hasEvent(index+1).map((event)=>(
-                    <Box sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px",marginTop: "5px", cursor: "pointer", overflow: "hidden", fontSize: "12px"}} onClick={(e) => {e.stopPropagation(); deleteEvent(index + 1)}}>{event.title}</Box>
-                  )) : <Box>
-                       <Box sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px", cursor: "pointer", overflow: "hidden", fontSize: "12px"}} onClick={(e) => {e.stopPropagation(); deleteEvent(index + 1)}}>{hasEvent(index+1)[0].title}</Box>
-                       <Button sx={{color: "white", textTransform: "lowercase !important", textAlign:"center"}}>+more</Button>
-                       {/* {showEvents ? 
-                       <Box bgcolor={'white'} color={'black'} zIndex="1000" minWidth="100%">
-                        {hasEvent(index+1).map((event)=>(
-                          <Box>{event.title}</Box>
+              {Array.from({length: numOfDays}).map((_,index)=>{
+                const num = index+1;
+                return <Grid
+                      key={num} 
+                      xs={1} 
+                      fontSize={14}
+                      sx={{position:"relative", height: "calc((100vh - 7 * 15px) / 7)",border: "0.25px solid", p: "2px", "&:active": {backgroundColor: "slategrey"}}} 
+                      onClick={(e)=>addEvent(num, e)} 
+                      display="flex" 
+                      flexDirection="column">
+                    <Box textAlign = "right">{ num }</Box>
+                    {hasEvent(num).length<=2 ? 
+                    hasEvent(num).map((event)=>(
+                    <Box
+                    sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px",margin: "5px 3px 0px 3px", cursor: "pointer", overflow: "hidden", fontSize: "13px"}} 
+                    onClick={(e) => {e.stopPropagation(); deleteEvent(num, event.title)}}>{event.title}</Box>
+                    ))
+                    : 
+                    <Box>
+                       <Box 
+                       sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px", cursor: "pointer", overflow: "hidden", fontSize: "13px", marginTop: "5px"}} 
+                       onClick={(e) => {e.stopPropagation(); deleteEvent(num,hasEvent(num)[0].title )}}
+                       >
+                        {hasEvent(num)[0].title}
+                      </Box>
+                      <Button 
+                       sx={{color: "white", textTransform: "lowercase !important", textAlign:"center"}} 
+                       onClick={()=>setShowEvents(!showEvents)}> +more </Button>
+                       {showEvents ? 
+                       <Box bgcolor={'white'} color={'black'} position="absolute" top="21%" right="2%" left="2%" padding="5px" zIndex="100">
+                        <Typography>{format(new Date( date.getFullYear(), date.getMonth(), num), "PPP")}</Typography>
+                        {hasEvent(num).map((event)=>(
+                          <li 
+                          onClick={(e)=>{e.stopPropagation(); deleteEvent(num, event.title)}} 
+                          style={{cursor: "pointer"}}
+                          >{event.title}</li>
                         ))}
-                       </Box> : ""} */}
+                       </Box> : ""}
                     </Box>}
                 </Grid>
-              ))}
+              })}
                {Array.from({length: suffixDays}).map((_,index)=>(
-                <Grid key={index} xs={1} fontSize={14} sx={{border: "0.25px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
+                <Grid key={index} xs={1} fontSize={14} sx={{border: "0.5px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
               ))}
             </Grid>
-            </Box>
+            </Box>: calType === "week" ? 
+            <Box m="5px" height="65vh" overflow="auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    {weekdays.map((week)=>(
+                      <th style={{height: "calc((20vh - 7 * 1px) / 7)"}}>{new Date(week).getDate()}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                {timeSlotsForDay.map((time, timeIndex) => (
+                  <>
+                  <tr key={timeIndex}>
+                    <td className='textLow'>{time}</td>
+                    {weeks.map((week)=>(
+                      <td className="borderDotted" key={week} onClick={()=>console.log(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)"}}></td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td style={{height: "calc((20vh - 7 * 1px) / 7)"}}></td>
+                    {weeks.map((week)=>(
+                      <td className="bordertopDotted" key={week} onClick={()=>console.log(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)", borderTop:"none !important"}}></td>
+                    ))}
+                  </tr>
+                  </>
+                ))} 
+                </tbody>
+              </table>
+            </Box> 
+            : 
+            <Box>
+
+            </Box>}
           </Box>
         </Box>
     </Box>

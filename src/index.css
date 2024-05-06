@@ -56,7 +56,7 @@ th, tr, td{
     right: 0;
     bottom: 0;
     left: 0;
-    border-bottom: 1px dotted white;
+    border-bottom: 1px dotted white !important;
 }
 .borderDotted{
   position: relative;
@@ -68,7 +68,7 @@ th, tr, td{
     right: 0;
     bottom: 0;
     left: 0;
-    border-bottom: 1px dotted white;
+    border-bottom: 1px dotted white !important;
 }
 .bordertopDotted{
   position: relative;

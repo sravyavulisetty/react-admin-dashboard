@@ -79,13 +79,13 @@ function Sidebar() {
                 <Item title='Invoice Balances' to='/invoices' icon={<ReceiptOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Pages</Typography>
                 <Item title='Profile Form' to='/form' icon={<PersonOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
+                <Item title='Calendar' to='/calendar' icon={<CalendarTodayOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='FAQ Page' to='/faq' icon={<HelpOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Charts</Typography>
                 <Item title='Bar Chart' to='/bar' icon={<BarChartOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Pie Chart' to='/pie' icon={<PieChartOutlineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Line Chart' to='/line' icon={<TimelineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Geography Chart' to='/geography' icon={<MapOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Item title='Calendar' to='/calendar' icon={<CalendarTodayOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
             </Box>
         </Menu>
     </ProSidebar>

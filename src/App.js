@@ -11,7 +11,7 @@ import Topbar from './pages/global/Topbar';
 import Form from './pages/form';
 // import Line from "../src/pages/line";
 // import Pie from "../src/pages/pie";
-// import FAQ from "../src/pages/faq";
+import FAQ from "../src/pages/faq";
 // import Geography from "../src/pages/geography";
 import Calendar from "../src/pages/calendar";
 import Sidebar from './pages/global/Sidebar';
@@ -35,7 +35,7 @@ function App() {
           {/* <Route path="/contacts" element={<Contacts/>}/> */}
           {/* <Route path="/line" element={<Line/>}/> */}
           {/* <Route path="/pie" element={<Pie/>}/> */}
-          {/* <Route path="/faq" element={<FAQ/>}/> */}
+          <Route path="/faq" element={<FAQ/>}/>
           {/* <Route path="/geography" element={<Geography/>}/> */}
           <Route path="/calendar" element={<Calendar/>}/>
           </Routes>

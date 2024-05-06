@@ -7,7 +7,7 @@ import { useTheme } from '@emotion/react';
 import { tokens } from '../../theme';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import { add, differenceInDays, endOfMonth, format, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays, addMinutes } from 'date-fns';
+import { add, differenceInDays, endOfMonth, format, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays, addMinutes, getHours, getDay } from 'date-fns';
 import '../../index.css';
 const Eventitem = ({event}) => {
   const theme = useTheme();
@@ -27,6 +27,7 @@ const Calendar = () => {
   const [showEvents, setShowEvents] = useState(false);
   const [startDateofWeek, setStartDateofWeek] = useState(startOfWeek(new Date(), { weekStartsOn: 0 }));
   const [calType, setcalType] = useState("month");
+  const [eventsInWeek, setEventsInWeek] = useState([]);
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
   const numOfDays = differenceInDays(endDate, startDate) + 1;
@@ -98,15 +99,37 @@ const Calendar = () => {
   const previousWeekDates = () => {
     setStartDateofWeek(subDays(startDateofWeek, 7));
   }
+
+  const nextDay = () => {
+    setDate(addDays(date, 1));
+  }
+  const prevDay = () =>{
+    setDate(subDays(date, 1));
+  }
+
   const addWeekDay = (week, time) => {
     const year = new Date(week).getFullYear();
     const month = new Date(week).getMonth();
     const date = new Date(week).getDate();
+    setDate(year, month, date);
     const title = prompt("Please enter a new title for your event");
     if(title!=="" && title !== null){
       setEventList([...eventList, {title: title, date: format(new Date(year, month, date), "MMM dd, yyyy")}]);
+      setEventsInWeek([...eventsInWeek, {title: title, date: new Date(year, month, date), time: getHours(new Date(year, month, date, parseInt(time)))}])
     }
   }
+  const hasWeekDay = (week) => {
+    const year = new Date(week).getFullYear();
+    const month = new Date(week).getMonth();
+    const date = new Date(week).getDate();
+    const event = eventsInWeek.filter((event) => {
+      return new Date(event.date).getTime() === new Date(year, month, date);
+    })
+    if(event){
+      return event.title;
+    }
+  }
+  
   const handleTimeClick = (week, time) => {
     console.log(addMinutes(new Date(new Date(week).getFullYear(),new Date(week).getMonth(), new Date(week).getDate(), parseInt(time), 0), 30));
   }
@@ -125,16 +148,16 @@ const Calendar = () => {
             <Box display="flex" justifyContent="space-between" flexDirection='row'>
               <Box display="flex" flexDirection="row" gap="15px">
               <Box sx={{backgroundColor: '#2c3e50', borderRadius:"3px", padding: 0}}>
-                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? prevMonth : calType === "week" ? previousWeekDates : ""}>
+                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? prevMonth : calType === "week" ? previousWeekDates : prevDay}>
                   <ChevronLeftRoundedIcon sx={{fontSize: 25, color: "white"}}/>
                 </IconButton>
-                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? nextMonth : calType === "week" ? nextWeekDates : ""}>
+                <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? nextMonth : calType === "week" ? nextWeekDates : nextDay}>
                   <ChevronRightRoundedIcon sx={{fontSize: 25, color: "white"}}/>
                 </IconButton>
               </Box>
               <Button sx={{backgroundColor: '#2c3e50', borderRadius:"3px", color:"white", '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setDate(new Date())}>Today</Button>
               </Box>
-              <Typography variant='h3' fontWeight="bold">{calType === "month" ? format(date, "LLLL yyyy"): calType === "week" ? format(new Date(weekdays[0]), "LLL d") + " - " + format(new Date(weekdays[weekdays.length-1]), "LLL d") + ", " + date.getFullYear() : ""}</Typography>
+              <Typography variant='h3' fontWeight="bold">{calType === "month" ? format(date, "LLLL yyyy"): calType === "week" ? format(new Date(weekdays[0]), "LLL d") + " - " + format(new Date(weekdays[weekdays.length-1]), "LLL d") + ", " + date.getFullYear() : format(date, "MMM dd, yyyy")}</Typography>
               <Box sx={{backgroundColor: '#2c3e50'}} display="flex" alignItems="center" borderRadius="3px" padding="4px">
                 <Button 
                 sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}} 
@@ -225,7 +248,7 @@ const Calendar = () => {
                   <tr key={timeIndex}>
                     <td className='textLow'>{time}</td>
                     {weekdays.map((week)=>(
-                      <td className="borderDotted" key={week} onClick={()=>addWeekDay(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":"" }}></td>
+                      <td className="borderDotted" key={week} onClick={()=>addWeekDay(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":""}}>{()=>hasWeekDay(week, time)}</td>
                     ))}
                   </tr>
                   <tr>
@@ -240,9 +263,34 @@ const Calendar = () => {
               </table>
             </Box> 
             : 
-            <Box>
-
-            </Box>}
+            <Box m="5px" height="65vh" overflow="auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                      <th style={{height: "calc((20vh - 7 * 1px) / 7)"}}>{weeks[getDay(date)]}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {timeSlotsForDay.map((time, timeIndex) => (
+                  <>
+                  <tr key={timeIndex}>
+                    <td className='textLow'>{time}</td>
+                    {/* {weekdays.map((week)=>(
+                      <td className="borderDotted" key={week} onClick={()=>addWeekDay(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":"" }}></td>
+                    ))} */}
+                  </tr>
+                  <tr>
+                    <td style={{height: "calc((20vh - 7 * 1px) / 7)"}}></td>
+                    {/* {weekdays.map((week)=>(
+                      <td className="bordertopDotted" key={week} onClick={()=>console.log(addMinutes(time, 30))} style={{height: "calc((20vh - 7 * 1px) / 7)", borderTop:"none !important", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":"" }}></td>
+                    ))} */}
+                  </tr>
+                  </>
+                ))} 
+                </tbody>
+              </table>
+            </Box> }
           </Box>
         </Box>
     </Box>

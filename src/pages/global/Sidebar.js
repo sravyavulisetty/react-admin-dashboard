@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import "../../index.css";
 import { Sidebar as ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import user from '../../assets/woman-profile-cartoon_18591-58480.avif';
@@ -18,7 +19,6 @@ import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 
-
 const Item = ({title, to, selected, icon, setSelected}) =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -34,10 +34,29 @@ function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState('dashboard');
   return (
-   <Box height="100vh" overflow="auto">
+   <Box height="100vh" overflow="auto" 
+   sx={{
+        
+        "& .ps-sidebar-container": {
+            background: `${colors.primary[400]} !important`,
+        },
+        "& ps-menu-icon": {
+            backgroundColor: "transparent !important",
+        },
+        "& .ps-menu-button": {
+            padding: "-px 35px 0px 20px !important",
+        },
+        "& .ps-menu-button:hover": {
+            color: "#868dfb !important",
+            background: "transparent !important",
+        },
+        "& .ps-menu-button.ps-active": {
+            color: "#6870fa !important",
+        },
+    }}>
     <ProSidebar collapsed={isCollapsed} backgroundColor={`${colors.primary[400]}`}>
         <Menu iconShape="square">
-            <MenuItem 
+            <MenuItem
             onClick={()=>setIsCollapsed(!isCollapsed)} 
             icon={isCollapsed ? <MenuOutlinedIcon/> : ''}
             style={{

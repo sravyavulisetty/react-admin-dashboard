@@ -1,13 +1,14 @@
 import { Box, IconButton, List, ListItem, ListItemText, Typography, Grid, Paper } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
+import {format} from 'date-fns'; 
 import Header from '../../components/Header';
 import {Button} from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { tokens } from '../../theme';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import { add, differenceInDays, endOfMonth, format, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays, addMinutes, getHours, getDay } from 'date-fns';
+import { add, differenceInDays, endOfMonth, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays, addMinutes, getHours, getDay } from 'date-fns';
 import '../../index.css';
 const Eventitem = ({event}) => {
   const theme = useTheme();
@@ -27,7 +28,6 @@ const Calendar = () => {
   const [showEvents, setShowEvents] = useState(false);
   const [startDateofWeek, setStartDateofWeek] = useState(startOfWeek(new Date(), { weekStartsOn: 0 }));
   const [calType, setcalType] = useState("month");
-  const [eventsInWeek, setEventsInWeek] = useState([]);
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
   const numOfDays = differenceInDays(endDate, startDate) + 1;
@@ -62,7 +62,7 @@ const Calendar = () => {
     let year = date.getFullYear();
     const title = prompt("Please enter a new title for your event");
     if(title!=="" && title !== null){
-      setEventList([...eventList, {title: title, date: format(new Date(year, month, selectedDate), "MMM dd, yyyy")}]);
+      setEventList([...eventList, {title: title, date: format(new Date(year, month, selectedDate), "MMM dd, yyyy"), time: "all day"}]);
     }
   }
   const hasEvent = (index) => {
@@ -108,32 +108,37 @@ const Calendar = () => {
   }
 
   const addWeekDay = (week, time) => {
-    const year = new Date(week).getFullYear();
-    const month = new Date(week).getMonth();
-    const date = new Date(week).getDate();
-    setDate(year, month, date);
+    const dateObj = new Date(week);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth();
+    const date = dateObj.getDate();
     const title = prompt("Please enter a new title for your event");
     if(title!=="" && title !== null){
-      setEventList([...eventList, {title: title, date: format(new Date(year, month, date), "MMM dd, yyyy")}]);
-      setEventsInWeek([...eventsInWeek, {title: title, date: new Date(year, month, date), time: getHours(new Date(year, month, date, parseInt(time)))}])
+      setEventList([...eventList, {title: title, date: format(new Date(year, month, date), "MMM dd, yyyy"), time: parseInt(time)}]);
     }
   }
   const hasWeekDay = (week) => {
     const year = new Date(week).getFullYear();
     const month = new Date(week).getMonth();
     const date = new Date(week).getDate();
-    const event = eventsInWeek.filter((event) => {
-      return new Date(event.date).getTime() === new Date(year, month, date);
+    const event = eventList.find((event) => {
+      return (new Date(event.date).getTime() === new Date(year, month, date).getTime() && event.time === "all day");
     })
     if(event){
-      return event.title;
+      return event;
     }
   }
-  
-  const handleTimeClick = (week, time) => {
-    console.log(addMinutes(new Date(new Date(week).getFullYear(),new Date(week).getMonth(), new Date(week).getDate(), parseInt(time), 0), 30));
-  }
-  
+  const hasWeekandTime =(week, time) => {
+    const year = new Date(week).getFullYear();
+    const month = new Date(week).getMonth();
+    const date = new Date(week).getDate();
+    const event = eventList.find((event)=>{
+      return ((new Date(event.date).getTime() === new Date(year, month, date).getTime()) && event.time === parseInt(time))
+    })
+    if(event){
+      return event;
+    }
+  }  
   return (
     <Box m="20px" ref={ref}>
       <Header title="CALENDAR" subtitle="Full Calendar Interactive Page"></Header>
@@ -157,7 +162,17 @@ const Calendar = () => {
               </Box>
               <Button sx={{backgroundColor: '#2c3e50', borderRadius:"3px", color:"white", '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setDate(new Date())}>Today</Button>
               </Box>
-              <Typography variant='h3' fontWeight="bold">{calType === "month" ? format(date, "LLLL yyyy"): calType === "week" ? format(new Date(weekdays[0]), "LLL d") + " - " + format(new Date(weekdays[weekdays.length-1]), "LLL d") + ", " + date.getFullYear() : format(date, "MMM dd, yyyy")}</Typography>
+              <Typography variant='h3' fontWeight="bold">
+                {calType === "month" 
+                ?
+                format(date, "LLLL yyyy")
+                : 
+                calType === "week" 
+                ?
+                format(new Date(weekdays[0]), "LLL d") + " - " + format(new Date(weekdays[weekdays.length-1]), "LLL d") + ", " + date.getFullYear()
+                : 
+                format(date, "MMM dd, yyyy")}
+                </Typography>
               <Box sx={{backgroundColor: '#2c3e50'}} display="flex" alignItems="center" borderRadius="3px" padding="4px">
                 <Button 
                 sx={{color: 'white', '&:hover':{backgroundColor: '#1e2b37'}}} 
@@ -196,10 +211,10 @@ const Calendar = () => {
                       flexDirection="column"
                       style={{backgroundColor: (date.getDate() === num && date.getFullYear() === new Date().getFullYear() && date.getMonth() === new Date().getMonth()) ? "grey": ""}}>
                     <Box textAlign = "right">{ num }</Box>
-                    {hasEvent(num).length<=2 ? 
+                    { hasEvent(num).length<=2 ? 
                     hasEvent(num).map((event)=>(
                     <Box
-                    sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px",margin: "5px 3px 0px 3px", cursor: "pointer", overflow: "hidden", fontSize: "13px"}} 
+                    sx={{textAlign: "start", backgroundColor:"#3788d8", borderRadius: "2px",margin: "5px 3px 0px 3px", cursor: "pointer", overflow: "hidden", fontSize: "13px", paddingLeft: "4px"}} 
                     onClick={(e) => {e.stopPropagation(); deleteEvent(num, event.title)}}>{event.title}</Box>
                     ))
                     : 
@@ -243,18 +258,56 @@ const Calendar = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {timeSlotsForDay.map((time, timeIndex) => (
+                  <tr>
+                    <td style={{height: "calc((20vh - 7 * 1px) / 7)", textAlign: "end", padding: "5px"}}>All day</td>
+                    {weekdays.map((week)=>(
+                      <td 
+                      key={week} 
+                      onClick={()=>addWeekDay(week)} 
+                      style={{height: "calc((20vh - 7 * 1px) / 7)", 
+                              backgroundColor: (new Date(week).getDate() === date.getDate() && new Date(week).getMonth() === date.getMonth()) ? 'grey' : ""}}>
+                                <p style={{color: "white",
+                                           textAlign: "center", 
+                                           backgroundColor:"#3788d8", 
+                                           borderRadius: "2px", 
+                                           margin: "5px 3px 0px 3px", 
+                                           cursor: "pointer", 
+                                           fontSize: "10px", 
+                                           cursor:"pointer"}} 
+                                    onClick={(e)=>{ e.stopPropagation();deleteEvent(new Date(week).getDate(), hasWeekDay(week)?.title)}}>{hasWeekDay(week)?.title}
+                                </p>
+                        </td>
+                    ))}
+                  </tr>
+                  {timeSlotsForDay.map((time, timeIndex) => (
                   <>
                   <tr key={timeIndex}>
                     <td className='textLow'>{time}</td>
-                    {weekdays.map((week)=>(
-                      <td className="borderDotted" key={week} onClick={()=>addWeekDay(week, time)} style={{height: "calc((20vh - 7 * 1px) / 7)", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":""}}>{()=>hasWeekDay(week, time)}</td>
-                    ))}
+                    {weekdays.map((week)=>{
+                      const dateObj = new Date(week);
+                      const year = dateObj.getFullYear();
+                      const month = dateObj.getMonth();
+                      const d = dateObj.getDate();
+                      const startTime = new Date(year, month, d, parseInt(time))
+                      const endTime = addMinutes(new Date(year, month, d, parseInt(time)), 30);
+                      return <td 
+                      className="borderDotted" 
+                      key={week} 
+                      onClick={()=>addWeekDay(week, time)} 
+                      style={{height: "calc((20vh - 7 * 1px) / 7)", width: "calc((20vw - 7 * 1px) / 7)", backgroundColor: (new Date(week).getDate() === date.getDate() && new Date(week).getMonth() === date.getMonth()) ? 'grey' : ""}}>
+                        <p style={{fontSize: "10px", backgroundColor:"#3788d8", borderRadius: "2px", margin: "0px 5px 0px 5px", paddingLeft: "2px", cursor:"pointer"}} 
+                           onClick={(e)=>{ e.stopPropagation();deleteEvent(new Date(week).getDate(), hasWeekDay(week)?.title)}}>{hasWeekandTime(week, time) && format(startTime,"h:mm") + "-" +format(endTime,"h:mm")  + " " + hasWeekandTime(week, time)?.title}
+                        </p>
+                      </td>
+                    })}
                   </tr>
                   <tr>
                     <td style={{height: "calc((20vh - 7 * 1px) / 7)"}}></td>
                     {weekdays.map((week)=>(
-                      <td className="bordertopDotted" key={week} onClick={()=>console.log(addMinutes(time, 30))} style={{height: "calc((20vh - 7 * 1px) / 7)", borderTop:"none !important", backgroundColor: (new Date().getDate() === new Date(week).getDate()) ? "grey":"" }}></td>
+                      <td className="bordertopDotted" 
+                          key={week} 
+                          onClick={()=>addWeekDay(week, time)} 
+                          style={{height: "calc((20vh - 7 * 1px) / 7)", borderTop:"none !important", backgroundColor: (new Date(week).getDate() === date.getDate() && new Date(week).getMonth() === date.getMonth()) ? 'grey' : ""}}></td>
                     ))}
                   </tr>
                   </>
@@ -272,6 +325,11 @@ const Calendar = () => {
                   </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td style={{textAlign: "end", padding: "2px"}}>
+                      All day
+                    </td>
+                  </tr>
                 {timeSlotsForDay.map((time, timeIndex) => (
                   <>
                   <tr key={timeIndex}>

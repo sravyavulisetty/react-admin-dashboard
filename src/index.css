@@ -70,18 +70,3 @@ th, tr, td{
     left: 0;
     border-bottom: 1px dotted white !important;
 }
-.bordertopDotted{
-  position: relative;
-  border-top: none;
-}
-.bordertopDotted::after{
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-.custom-menu-item :hover{
-  background-color: red;
-}

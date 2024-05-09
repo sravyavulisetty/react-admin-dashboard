@@ -10,6 +10,7 @@ import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import { add, differenceInDays, endOfMonth, startOfMonth, sub, addDays, startOfWeek, weekStartsOn, subDays, addMinutes, getHours, getDay } from 'date-fns';
 import '../../index.css';
+import Modal from '../../components/Modal';
 const Eventitem = ({event}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -36,6 +37,18 @@ const Calendar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (showEvents && ref.current && !ref.current.contains(e.target)) {
+        setShowEvents(false)
+      }
+    }
+    document.addEventListener("mousedown", checkIfClickedOutside)
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [showEvents]);
 
   const generateTimeSlotsForDay = () => {
     const timeSlots = [];
@@ -152,7 +165,7 @@ const Calendar = () => {
     }
   }  
   return (
-    <Box m="20px" ref={ref}>
+    <Box m="20px">
       <Header title="CALENDAR" subtitle="Full Calendar Interactive Page"></Header>
         <Box display="flex" flexDirection="row" justifyContent="space-between" gap="20px" height="75vh" overflow="auto" >
           <Box sx={{backgroundColor: `${colors.primary[400]}`, p: '15px', borderRadius: "4px", flex: "1 1 18%", width: "15%", overflow: "auto"}}>
@@ -214,11 +227,12 @@ const Calendar = () => {
               {Array.from({length: numOfDays}).map((_,index)=>{
                 const num = index+1;
                 return <Grid
+                      
                       key={num} 
                       xs={1} 
                       fontSize={14}
                       sx={{position:"relative", height: "calc((100vh - 7 * 15px) / 7)",border: "0.5px solid", p: "2px", "&:active": {backgroundColor: "slategrey"}}} 
-                      onClick={()=>addEvent(num, "all day")} 
+                      onClick={()=>{setShowEvents(false); addEvent(num, "all day");}} 
                       display="flex" 
                       flexDirection="column"
                       style={{backgroundColor: (date.getDate() === num && date.getFullYear() === new Date().getFullYear() && date.getMonth() === new Date().getMonth()) ? "grey": ""}}>
@@ -230,26 +244,27 @@ const Calendar = () => {
                     onClick={(e) => {e.stopPropagation(); deleteEvent(num, event.title)}}>{event.title}</Box>
                     ))
                     : 
-                    <Box>
+                    <Box onClick={()=>setShowEvents(false)}>
                        <Box 
                        sx={{textAlign: "center", backgroundColor:"#3788d8", borderRadius: "2px", cursor: "pointer", overflow: "hidden", fontSize: "12px", marginTop: "5px"}} 
-                       onClick={(e) => {e.stopPropagation(); deleteEvent(num,hasEvent(num)[0].title )}}
+                       onClick={(e) => {e.stopPropagation(); deleteEvent(num,hasEvent(num)[0].title)}}
                        >
                         {hasEvent(num)[0].title}
                       </Box>
-                      <Button 
-                       sx={{color: "white", textTransform: "lowercase !important", textAlign:"center"}} 
-                       onClick={()=>setShowEvents(!showEvents)}> +more </Button>
-                       {showEvents ? 
-                       <Box bgcolor={'white'} color={'black'} position="absolute" top="21%" right="2%" left="2%" padding="5px" zIndex="100">
-                        <Typography>{format(new Date( date.getFullYear(), date.getMonth(), num), "PPP")}</Typography>
+                      <small 
+                       style={{color: "white", textTransform: "lowercase !important", textAlign:"center", cursor: "pointer", margin: "2px"}} 
+                       onClick={(e)=>{e.stopPropagation(); setShowEvents(true)}}>{`+${hasEvent(num).length-1} more`}</small>
+                       {showEvents && 
+                       <Modal title={format(new Date( date.getFullYear(), date.getMonth(), num), "PPP")} onClose={(e)=>{e.stopPropagation(); setShowEvents(false)}}>
                         {hasEvent(num).map((event)=>(
                           <li 
+                          className='list-event'
                           onClick={(e)=>{e.stopPropagation(); deleteEvent(num, event.title)}} 
-                          style={{cursor: "pointer"}}
+                          style={{cursor: "pointer", fontSize: "13px", padding: "2px 0px 2px 10px", listStyleType: "none", width: "100%"}}
                           >{event.title}</li>
                         ))}
-                       </Box> : ""}
+                       </Modal>
+                      }
                     </Box>}
                 </Grid>
               })}
@@ -261,24 +276,25 @@ const Calendar = () => {
             <Box m="5px" height="65vh" overflow="auto">
               <table>
                 <thead>
-                  <tr>
-                    <th></th>
+                  <tr className='table-row'>
+                    <th className="textLow"></th>
                     {weekdays.map((week)=>{
                       const weekDay = new Date(week)
-                      return <th style={{height: "calc((20vh - 7 * 1px) / 7)"}}>{weeks[weekDay.getDay()] + " " + weekDay.getDate() + "/" + (weekDay.getMonth() + 1)}</th>
+                      return <th style={{height: "calc((20vh - 7 * 1px) / 7)", borderRight: "1px solid lightgray"}}>{weeks[weekDay.getDay()] + " " + weekDay.getDate() + "/" + (weekDay.getMonth() + 1)}</th>
                     })}
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={{height: "calc((20vh - 7 * 1px) / 7)", textAlign: "end", padding: "5px"}}>All day</td>
+                  <tr style={{borderTop: "1px solid lightgray", borderBottomStyle: "double", borderBottomWidth: "medium"}}>
+                    <td style={{height: "calc((20vh - 7 * 1px) / 7)", textAlign: "end", padding: "5px", borderRight: "1px solid lightgray"}}>All day</td>
                     {weekdays.map((week)=>(
                       <td 
+                      className="textLow"
                       key={week} 
                       onClick={()=>addWeekDay(week)} 
                       style={{height: "calc((20vh - 7 * 1px) / 7)", 
                               backgroundColor: (new Date(week).getDate() === date.getDate() && new Date(week).getMonth() === date.getMonth()) ? 'grey' : ""}}>
-                                <p style={{color: "white",
+                                <p style={{
                                            textAlign: "center", 
                                            backgroundColor:"#3788d8", 
                                            borderRadius: "2px", 
@@ -292,16 +308,17 @@ const Calendar = () => {
                     ))}
                   </tr>
                   {timeSlotsForDay.map((time, timeIndex) => (
-                  <tr key={timeIndex}>
+                  <tr key={timeIndex} className={timeIndex%2===0 ? "table-rowdotted" : "table-rowsolid"}>
                     <td className="textLow" style={{textAlign: "end", padding: "5px", visibility: timeIndex%2!==0 && "hidden"}}>{time}</td>
                     {weekdays.map((week)=>(
                       <td 
                       // className={timeIndex%2===0 ? "borderDotted" : undefined}
+                      className="textLow"
                       key={week} 
                       onClick={()=>addWeekDay(week, time)} 
                       style={{height: "calc((20vh - 7 * 1px) / 7)", width: "calc((20vw - 7 * 1px) / 7)",
                               backgroundColor: (new Date(week).getDate() === date.getDate() && new Date(week).getMonth() === date.getMonth()) ? 'grey' : ""}}>
-                                <p style={{color: "white",
+                                <p style={{
                                            textAlign: "center", 
                                            backgroundColor:"#3788d8", 
                                            borderRadius: "2px", 
@@ -331,14 +348,14 @@ const Calendar = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={{textAlign: "end", padding: "5px"}}>
+                  <tr style={{borderTop: "1px solid lightgray", borderBottomStyle: "double", borderBottomWidth: "medium"}}>
+                    <td style={{textAlign: "end", padding: "5px", borderRight: "1px solid lightgray"}}>
                       All day
                     </td>
                   </tr>
                 {timeSlotsForDay.map((time, timeIndex) => (
                   <>
-                  <tr key={timeIndex}>
+                  <tr key={timeIndex} className={timeIndex%2===0 ? "table-rowdotted" : "table-rowsolid"}>
                     <td className='textLow' style={{visibility: timeIndex%2!==0 && "hidden", padding:"5px"}}>{time}</td>
                     <td 
                     onClick={()=>addEvent(date.getDate(), time)}
@@ -347,7 +364,6 @@ const Calendar = () => {
                             height: "calc((20vh - 7 * 1px) / 7)", 
                             width: "calc((20vw - 7 * 1px) / 7)"}}>
                           <p style={{
-                            color: "white",
                                      width: "max-content",
                                      paddingLeft: "4px",
                                      paddingRight: "4px",

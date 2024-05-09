@@ -39,15 +39,25 @@ table{
   border: 1px solid lightgray;
   min-width: 100%
 }
-th, tr, td{
+.table-row{
   border: 1px solid lightgray;
 }
+.table-rowdotted{
+  border-bottom: 1px dotted lightgray;
+}
+.table-rowsolid{
+  border-bottom: 1px solid lightgray;
+}
+/* th, tr, td{
+  border: 1px solid lightgray;
+} */
 .textLow{
   text-transform: lowercase;
   padding: 2px;
   width: 8%;
   text-align: end;
   position: relative;
+  border-right: 1px solid lightgray;
 }
 .textLow::after{
   content: '';
@@ -56,7 +66,6 @@ th, tr, td{
     right: 0;
     bottom: 0;
     left: 0;
-    border-bottom: 1px dotted white !important;
 }
 .borderDotted{
   position: relative;
@@ -69,4 +78,27 @@ th, tr, td{
     bottom: 0;
     left: 0;
     border-bottom: 1px dotted white !important;
+}
+.list-event:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.modal{
+  background-color: white;
+  color: black;
+  z-index: 100;
+  position: absolute;
+  top: 21%;
+  right: 2%;
+  left: 2%;
+  width: 120%;
+}
+.modal-header{
+  font-weight: bold;
+  font-size: 13px;
+  background-color: hsla(0, 0%, 82%, .3);
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 3px 0px 3px;
 }

@@ -59,14 +59,6 @@ table{
   position: relative;
   border-right: 1px solid lightgray;
 }
-.textLow::after{
-  content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
 .borderDotted{
   position: relative;
 }
@@ -101,4 +93,22 @@ table{
   justify-content: space-between;
   align-items: center;
   padding: 0px 3px 0px 3px;
+}
+td .pday{
+  width: max-content;
+  text-align: center; 
+  background-color: #3788d8;
+  border-radius: 2px;
+  margin: 0px 5px 0px 5px;
+  font-size: 10px;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+.p-week{
+  text-align: center; 
+  background-color:  #3788d8; 
+  border-radius: 2px; 
+  margin: 5px 3px 0px 3px; 
+  cursor: pointer; 
+  font-size: 10px;
 }

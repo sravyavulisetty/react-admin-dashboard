@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import "../../index.css";
 import { Sidebar as ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import user from '../../assets/woman-profile-cartoon_18591-58480.avif';
@@ -18,7 +19,6 @@ import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 
-
 const Item = ({title, to, selected, icon, setSelected}) =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -34,14 +34,33 @@ function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState('dashboard');
   return (
-   <Box>
+   <Box height="100vh" overflow="auto" 
+   sx={{
+        
+        "& .ps-sidebar-container": {
+            background: `${colors.primary[400]} !important`,
+        },
+        "& ps-menu-icon": {
+            backgroundColor: "transparent !important",
+        },
+        "& .ps-menu-button": {
+            padding: "-px 35px 0px 20px !important",
+        },
+        "& .ps-menu-button:hover": {
+            color: "#868dfb !important",
+            background: "transparent !important",
+        },
+        "& .ps-menu-button.ps-active": {
+            color: "#6870fa !important",
+        },
+    }}>
     <ProSidebar collapsed={isCollapsed} backgroundColor={`${colors.primary[400]}`}>
         <Menu iconShape="square">
-            <MenuItem 
+            <MenuItem
             onClick={()=>setIsCollapsed(!isCollapsed)} 
             icon={isCollapsed ? <MenuOutlinedIcon/> : ''}
             style={{
-                margin: '10px 0px 20px 0px',
+                margin: '10px 0px 10px 0px',
                 color: colors.grey[100]
             }}
             >
@@ -61,31 +80,31 @@ function Sidebar() {
                 )}
             </MenuItem>
             {!isCollapsed && (
-                <Box mb='18px'>
+                <Box mb='10px'>
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <img alt='profile user' width='90px' height='90px' src={user} style={{cursor: 'pointer', borderRadius: '50%'}}/>  
                     </Box>
                     <Box textAlign='center'>
-                        <Typography variant='h2' color={colors.grey[100]} fontWeight='bold' sx={{m: '10px 0 0 0'}}>Sravya</Typography>
+                        <Typography variant='h2' color={colors.grey[100]} fontWeight='bold' sx={{m: '10px 0 0 0', letterSpacing: "1px"}}>Sravya</Typography>
                         <Typography variant='h5' color={colors.greenAccent[500]} sx={{m: '5px 0 0 0'}}>ADMIN</Typography>
                     </Box>
                 </Box>
             )}
             <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                 <Item title='Dashboard' to='/' icon={<HomeOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Data</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Data</Typography>
                 <Item title='Manage Team' to='/team' icon={<PeopleOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Contacts' to='/contacts' icon={<ContactsOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Invoice Balances' to='/invoices' icon={<ReceiptOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Pages</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Pages</Typography>
                 <Item title='Profile Form' to='/form' icon={<PersonOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
+                <Item title='Calendar' to='/calendar' icon={<CalendarTodayOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='FAQ Page' to='/faq' icon={<HelpOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Typography variant='h6' color={colors.grey[100]} sx={{m: "15px 0px 5px 20px"}}>Charts</Typography>
+                <Typography variant='h6' color={colors.grey[100]} sx={{m: "10px 0px 5px 20px"}}>Charts</Typography>
                 <Item title='Bar Chart' to='/bar' icon={<BarChartOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Pie Chart' to='/pie' icon={<PieChartOutlineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Line Chart' to='/line' icon={<TimelineOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
                 <Item title='Geography Chart' to='/geography' icon={<MapOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
-                <Item title='Calendar' to='/calendar' icon={<CalendarTodayOutlinedIcon/>} selected={selected} setSelected={setSelected}></Item>
             </Box>
         </Menu>
     </ProSidebar>

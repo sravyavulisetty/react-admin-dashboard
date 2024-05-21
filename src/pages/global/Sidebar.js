@@ -34,9 +34,10 @@ function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState('dashboard');
   return (
-   <Box height="100vh" overflow="auto" 
+   <Box height="100vh" width="20%"
    sx={{
-        
+        overflowX:"clip",
+        overflowY: "auto",
         "& .ps-sidebar-container": {
             background: `${colors.primary[400]} !important`,
         },

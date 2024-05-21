@@ -34,7 +34,7 @@ form{
   display: flex;
   flex-direction: column;
 }
-table{
+.caltable{
   border-collapse: collapse;
   border: 1px solid lightgray;
   min-width: 100%
@@ -48,9 +48,6 @@ table{
 .table-rowsolid{
   border-bottom: 1px solid lightgray;
 }
-/* th, tr, td{
-  border: 1px solid lightgray;
-} */
 .textLow{
   text-transform: lowercase;
   padding: 2px;
@@ -112,3 +109,27 @@ td .pday{
   cursor: pointer; 
   font-size: 10px;
 }
+.team-table{
+  border-collapse: collapse;
+  width: 90%;
+  margin-left: 50px;
+  height: 60%;
+}
+.footer{
+  background-color: #3e4396;
+  width: 90%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 50px;
+}
+/* input[type="checkbox"]{
+  accent-color: #94e2cd;
+} */
+/* select{
+  color: white;
+  border: none;
+  outline: none;
+  background: none;
+} */

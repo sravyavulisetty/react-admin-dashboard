@@ -1,11 +1,11 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Button } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { useEffect, useState } from "react";
 
 const contactRegExp = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/g;
-const emailRegexp = /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/;
+const emailRegexp = /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/;
 const userSchema = Yup.object().shape({
 	firstName: Yup.string().required("This field is required"),
 	lastName: Yup.string().required("This field is required"),
@@ -23,11 +23,22 @@ const initialValues = {
 	contact: "",
 	address: "",
 };
-
 const Form = () => {
-	const handleSubmit = (values) => {
-		console.log(values);
+	const [id, setId] = useState(0);
+	const [userData, setuserData] = useState(JSON.parse(localStorage.getItem("user-data")) || []);
+	const contactRegExp = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/g;
+	const handleSubmit = (values, { resetForm }) => {
+		setId((prev) => prev+1);
+		setuserData(prev => [...prev, {
+			id: id,
+			...values
+		}]);
+		resetForm();
 	};
+	
+	useEffect(()=>{
+		localStorage.setItem("user-data", JSON.stringify(userData));
+	},[userData]);
 	return (
 		<Box m="20px">
 			<Header title="CREATE USER" subtitle="Create a new User Profile" />
@@ -49,6 +60,7 @@ const Form = () => {
 							gridTemplateColumns="repeat(4, minmax(0, 1fr))"
 							gap="30px">
 							<TextField
+							id="fname"
 								fullWidth
 								variant="filled"
 								label="First Name"
@@ -61,6 +73,7 @@ const Form = () => {
                                 sx={{ gridColumn: "span 2"}}
 							/>
 							<TextField
+							id="lname"
 								fullWidth
 								variant="filled"
 								label="Last Name"
@@ -74,6 +87,7 @@ const Form = () => {
                                 sx={{ gridColumn: "span 2"}}
 							/>
 							<TextField
+							id="eml"
 								fullWidth
 								variant="filled"
 								label="Email"
@@ -87,10 +101,11 @@ const Form = () => {
                 sx={{ gridColumn: "span 4"}}
 							/>
 							<TextField
+							id="cct"
 								fullWidth
 								variant="filled"
 								label="Contact"
-								value={values.contact}
+								value={values.contact.replace(contactRegExp, '($1) $2-$3')}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								type="text"
@@ -100,6 +115,7 @@ const Form = () => {
                                 sx={{ gridColumn: "span 4"}}
 							/>
 							<TextField
+							id="adss"
 								fullWidth
 								variant="filled"
 								label="Address"

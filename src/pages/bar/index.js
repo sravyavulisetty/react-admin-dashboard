@@ -8,20 +8,40 @@ const Bar = () => {
     const svgRef = useRef();
 
     useEffect(() => {
-        const margin = { left: 70, right: 20, top: 10, bottom: 30 };
-        const width = 1000 - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom;
+        const margin = { left: 70, right: 20, top: 20, bottom: 30 };
+        const width = 1100 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
 
         d3.select(svgRef.current).select('svg').remove();
 
         const svg = d3
             .select(svgRef.current)
             .append('svg')
+            .attr('viewBox', '0 0 1000 600')
+            .attr('preserveAspectRatio', 'none')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
+            .call(responsiveBar)
             .append('g')
             .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
+            function responsiveBar(svg) {
+                const container = d3.select(svg.node().parentNode),
+                    width = parseInt(svg.style('width'), 10),
+                    height = parseInt(svg.style('height'), 10),
+                    aspect = width / height;
+                svg.attr('viewBox', `0 0 ${width} ${height}`).
+                attr('preserveAspectRatio', 'xMinYMid').
+                call(resize);
+                 
+                d3.select(window).on('resize.' + container.attr('id'), resize);
+      
+                function resize() {
+                    const targetWidth = parseInt(container.style('width'));
+                    svg.attr('width', targetWidth);
+                    svg.attr('height', Math.round(targetWidth / aspect));
+                }
+            }
         const keys = ['hotdog', 'burger', 'kebab', 'donut'];
         const stack = d3.stack().keys(keys);
         const stackedSeries = stack(mockBarData);
@@ -39,6 +59,7 @@ const Bar = () => {
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
         .style('fill', 'white')
+        .style('padding-top', '20')
         .text("Countries");
     
 
@@ -71,12 +92,12 @@ const Bar = () => {
         .attr("id", "tooltip")
         .style('color', 'black')
         .style("position", "absolute")
-        .style("opacity", 0)
+        .style("opacity", 1)
         .style('box-shadow', '2px 2px')
         .style("background-color", "white")
         .style('border-radius', '4px')
-        .style('z-index', '1000')
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .style('pointer-events', 'none');
         
         const mouseover = function(event, d) {
             tooltip.style('opacity', 0.8);
@@ -108,7 +129,7 @@ const Bar = () => {
         .attr("x", ((margin.left)*9)+20)
         .style('fill', 'white')
         .style('font-size', '12')
-        .attr("y", (-(margin.top/4) + 10))
+        .attr("y", (-(margin.top/4) + 9))
         .text('hotdog')
 
         svg.append('rect')
@@ -123,7 +144,7 @@ const Bar = () => {
         .attr("x", ((margin.left)*10.2)+20)
         .style('fill', 'white')
         .style('font-size', '12')
-        .attr("y", (-(margin.top/4) + 10))
+        .attr("y", (-(margin.top/4) + 9))
         .text('burger')
 
         svg.append('rect')
@@ -138,7 +159,7 @@ const Bar = () => {
         .attr("x", ((margin.left)*11.4)+20)
         .style('fill', 'white')
         .style('font-size', '12')
-        .attr("y", (-(margin.top/4) + 10))
+        .attr("y", (-(margin.top/4) + 9))
         .text('kebab')
 
         svg.append('rect')
@@ -153,7 +174,7 @@ const Bar = () => {
         .attr("x", ((margin.left)*12.5)+20)
         .style('fill', 'white')
         .style('font-size', '12')
-        .attr("y", (-(margin.top/4) + 10))
+        .attr("y", (-(margin.top/4) + 9))
         .text('donut')
 
         svg.append('g')

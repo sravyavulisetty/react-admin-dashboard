@@ -72,12 +72,7 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={data} columns={columns} 
-        initialState={{
-          ...data.initialState,
-          pagination: { paginationModel: { pageSize: 5 } },
-        }}
-        pageSizeOptions={[5, 10, 25]}/>
+        <DataGrid checkboxSelection rows={data} columns={columns} />
       </Box>
     </Box>
   );

@@ -6,7 +6,7 @@ import Topbar from './pages/global/Topbar';
 // import Dashboard from "../src/pages/dashboard";
 import Team from "../src/pages/team";
 import Invoices from "../src/pages/invoices";
-// import Bar from "../src/pages/bar";
+import Bar from "../src/pages/bar";
 import Contacts from "../src/pages/contacts";
 import Form from './pages/form';
 // import Line from "../src/pages/line";
@@ -31,7 +31,7 @@ function App() {
           <Route path="/form" element={<Form />}/>
           <Route path="/team" element={<Team/>}/>
           <Route path="/invoices" element={<Invoices/>}/>
-          {/* <Route path="/bar" element={<Bar/>}/> */}
+          <Route path="/bar" element={<Bar/>}/>
           <Route path="/contacts" element={<Contacts/>}/>
           {/* <Route path="/line" element={<Line/>}/> */}
           {/* <Route path="/pie" element={<Pie/>}/> */}

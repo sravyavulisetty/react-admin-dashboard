@@ -124,12 +124,10 @@ td .pday{
   align-items: center;
   margin-left: 50px;
 }
-/* input[type="checkbox"]{
-  accent-color: #94e2cd;
-} */
-/* select{
-  color: white;
-  border: none;
-  outline: none;
-  background: none;
-} */
+.grid-line .tick{
+  stroke: lightgrey;
+  opacity: 0.7;
+}
+.grid-line path{
+  stroke-width: 0;
+}

@@ -6,7 +6,6 @@ import { mockBarData } from '../../data/mockData';
 import '../../index.css';
 const Bar = () => {
     const svgRef = useRef();
-
     useEffect(() => {
         const margin = { left: 70, right: 20, top: 20, bottom: 30 };
         const width = 1100 - margin.left - margin.right;

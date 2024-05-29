@@ -48,11 +48,10 @@ const Pie = () => {
 
     const mouseover = function(event, d) {
       d3.select(this).transition().duration(200).attr("d", arcHover(d));
-      tooltip.style('opacity', 0.8);
+      tooltip.style('opacity', 1);
     };
 
     const mousemove = function(event, d) {
-      const [mouseX, mouseY] = d3.pointer(event);
       const formatter = d3.format(',');
       tooltip.html(`${d.data.label}: ${formatter(d.data.value)}`)
         .style("top", `${event.pageY + 10}px`)

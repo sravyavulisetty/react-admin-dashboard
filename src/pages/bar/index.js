@@ -99,7 +99,7 @@ const Bar = () => {
         .style('pointer-events', 'none');
         
         const mouseover = function(event, d) {
-            tooltip.style('opacity', 0.8);
+            tooltip.style('opacity', 1);
         };
 
         const mousemove = function(event, d) {

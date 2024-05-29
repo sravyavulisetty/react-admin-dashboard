@@ -117,11 +117,12 @@ const colorCategories = {
             boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)',
             padding:"5px",
             borderRadius: '4px',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            opacity: 1
             }}
            >
           {tooltip.value !== undefined ? 
-          <><svg width='10' height='10' style={{marginRight:"5px"}}><rect width='40' height='40' fill={tooltip.color}></rect></svg>{tooltip.country} <span style={{fontWeight: "bold"}}>{formatNumber(tooltip.value)}</span></>
+          <div style={{display: 'flex', alignItems: "center", gap: "5px"}}><svg width='12' height='12'><rect width='40' height='40' fill={tooltip.color}></rect></svg>{tooltip.country} <span style={{fontWeight: "bold"}}>{formatNumber(tooltip.value)}</span></div>
           : ''}
           </div>
         )}

@@ -7,14 +7,33 @@ const LineChart = () => {
   const svgRef = useRef();
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current);
-    const width = 900;
+    const svg = d3.select(svgRef.current)
+    .call(responsiveBar);
+    const width = 1000;
     const height = 500;
     const margin = { top: 20, right: 30, bottom: 30, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
+
     svg.selectAll('*').remove();
 
+    function responsiveBar(svg) {
+        const container = d3.select(svg.node().parentNode),
+            width = parseInt(svg.style('width'), 10),
+            height = parseInt(svg.style('height'), 10),
+            aspect = width / height;
+        svg.attr('viewBox', `0 0 ${width} ${height}`).
+        attr('preserveAspectRatio', 'xMinYMid').
+        call(resize);
+         
+        d3.select(window).on('resize.' + container.attr('id'), resize);
+
+        function resize() {
+            const targetWidth = parseInt(container.style('width'));
+            svg.attr('width', targetWidth);
+            svg.attr('height', Math.round(targetWidth / aspect));
+        }
+    }
 
     const tooltip = d3.select('body').append('div')
       .attr('class', 'tooltip')
@@ -22,7 +41,6 @@ const LineChart = () => {
       .style('background-color', 'white')
       .style('color', 'black')
       .style('box-shadow', '2px 2px')
-    //   .style('border', '1px solid #d3d3d3')
       .style('border-radius', '5px')
       .style('padding', '5px')
       .style('pointer-events', 'none')

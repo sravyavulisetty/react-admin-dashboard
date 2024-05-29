@@ -159,7 +159,7 @@ const Calendar = () => {
             ))}
           </Box>
           <Box display="flex" flexDirection="column" width="85%" gap="10px">
-            <Box display="flex" justifyContent="space-between" flexDirection='row'>
+            <Box display="flex" justifyContent="space-between" flexDirection='row' alignItems="center">
               <Box display="flex" flexDirection="row" gap="15px">
               <Box sx={{backgroundColor: '#2c3e50', borderRadius:"3px", padding: 0}}>
                 <IconButton sx={{'&:hover':{backgroundColor: '#1e2b37', borderRadius: "0px !important"}}} onClick={calType === "month" ? prevMonth : calType === "week" ? previousWeekDates : prevDay}>
@@ -169,9 +169,9 @@ const Calendar = () => {
                   <ChevronRightRoundedIcon sx={{fontSize: 25, color: "white"}}/>
                 </IconButton>
               </Box>
-              <Button sx={{backgroundColor: '#2c3e50', borderRadius:"3px", color:"white", '&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setDate(new Date())}>Today</Button>
+              <Button sx={{backgroundColor: '#2c3e50', borderRadius:"3px", color:"white",'&:hover':{backgroundColor: '#1e2b37'}}} onClick={()=>setDate(new Date())}>Today</Button>
               </Box>
-              <Typography variant='h3' fontWeight="bold">
+              <Typography variant='h4' fontWeight="bold">
                 {calType === "month" 
                 ?
                 format(date, "LLLL yyyy")
@@ -203,7 +203,7 @@ const Calendar = () => {
             <Box m="10px">
             <Grid container spacing={1} columns={7} height="65vh">
               {weeks.map((week)=>(
-                <Grid key={week} xs={1} fontSize={16} fontWeight="bold" sx={{textAlign: "center", border: "0.5px solid lightgray"}}>{week}</Grid>
+                <Grid key={week} xs={1} fontSize={14} fontWeight="bold" sx={{textAlign: "center", border: "0.5px solid lightgray"}}>{week}</Grid>
               ))}
               {Array.from({length: prefixDays}).map((_,index)=>(
                 <Grid key={index} xs={1} fontSize={14} sx={{border: "0.25px solid lightgray", height: "calc((100vh - 7 * 15px) / 7)"}}></Grid>
@@ -257,7 +257,7 @@ const Calendar = () => {
             </Grid>
             </Box>: calType === "week" ? 
             <Box m="5px" height="65vh" overflow="auto">
-              <table>
+              <table className='caltable'>
                 <thead>
                   <tr className='table-row'>
                     <th className="textLow"></th>

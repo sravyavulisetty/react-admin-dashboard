@@ -151,7 +151,7 @@ const Calendar = () => {
   return (
     <Box m="20px">
       <Header title="CALENDAR" subtitle="Full Calendar Interactive Page"></Header>
-        <Box display="flex" flexDirection="row" justifyContent="space-between" gap="20px" height="75vh" overflow="auto" >
+        <Box display="flex" flexDirection="row" justifyContent="space-between" gap="20px" height="75vh" overflow="auto" mt={5}>
           <Box sx={{backgroundColor: `${colors.primary[400]}`, p: '15px', borderRadius: "4px", flex: "1 1 18%", width: "15%", overflow: "auto"}}>
             <Typography variant='h5' m="0 0 5px 0">Events</Typography>
             {eventList.map((event)=>(

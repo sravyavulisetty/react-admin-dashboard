@@ -30,7 +30,7 @@ const Pie = () => {
 
     const pie = d3.pie().value((d) => d.value);
     const arc = d3.arc().innerRadius(80).outerRadius(radius);
-    const arcHover = d3.arc().innerRadius(80).outerRadius(radius * 1.1);
+    const arcHover = d3.arc().innerRadius(80).outerRadius(radius * 0.8);
     const labelRadius = radius * 0.7;
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
     const arcs = pie(mockPieData);
@@ -90,7 +90,7 @@ const Pie = () => {
       .data(mockPieData)
       .enter()
       .append("g")
-      .attr("transform", (d, i) => `translate(${radius + 50}, ${-450 / 2 + i * 25 + 20})`)
+      .attr("transform", (d, i) => `translate(${radius + 50}, ${-450 / 2 + i * 25 + 100})`)
       .each(function(d) {
         d3.select(this).append("circle")
           .attr("cx", 0)
@@ -115,7 +115,7 @@ const Pie = () => {
   return (
     <Box m='20px'>
       <Header title='PIE CHART' subtitle='Simple Pie Chart' />
-      <svg ref={svgRef}></svg>
+      <svg ref={svgRef} style={{marginTop: '30px'}}></svg>
     </Box>
   );
 }

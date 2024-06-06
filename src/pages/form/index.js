@@ -54,7 +54,7 @@ const Form = () => {
 					handleChange,
 					handleSubmit,
 				}) => (
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} style={{marginTop: '30px'}}>
 						<Box
 							display="grid"
 							gridTemplateColumns="repeat(4, minmax(0, 1fr))"

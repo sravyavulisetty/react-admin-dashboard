@@ -31,12 +31,14 @@ const LineChart = ({ linewidth, lineheight, cutoffwidth, cutoffheight }) => {
       .domain(mockLineData.map(d => d.id))
       .range(mockLineData.map(d => d.color));
 
+    const yTicks = d3.range(0, d3.max(mockLineData.flatMap(d => d.data.map(datapoint => datapoint.y))) + 100, 100)
+    
     g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale));
 
     g.append('g')
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale).tickValues(yTicks));
 
     const line = d3.line()
       .x(d => xScale(d.x))

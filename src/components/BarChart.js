@@ -137,7 +137,7 @@ const BarChart = ({barheight, barwidth}) => {
 
     return (
         <div style={{display: 'flex', alignItems: 'center'}}>
-            <div ref={svgRef} style={{position: "relative", marginTop: '30px'}}></div>
+            <div ref={svgRef} style={{position: "relative", marginTop: '25px'}}></div>
             <div>
                 <Box display='flex' gap='5px' alignItems='center'>
                     <div style={{width: '10px', height: '10px', backgroundColor: 'rgb(232, 193, 160)'}}></div>

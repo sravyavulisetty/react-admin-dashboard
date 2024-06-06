@@ -44,8 +44,8 @@ const Dashboard = () => {
           
           <Box gridColumn={matches ? "span 8" : "span 12"} gridRow="span 2" sx={{backgroundColor: colors.primary[400]}} >
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Box px={3} py={1}>
-                <Typography variant='h5'>Revenue Generated</Typography>
+              <Box px={3} pt={2}>
+                <Typography variant='h5' sx={{fontWeight: 'bold'}} >Revenue Generated</Typography>
                 <Typography variant='h5' sx={{color: colors.greenAccent[500], fontWeight: "bold"}}>$59,342,32</Typography>
               </Box>
               <Box>
@@ -55,7 +55,7 @@ const Dashboard = () => {
               </Box>
             </Box>
             <Box width={700} height={300}>
-              <LineChart linewidth={700} lineheight={250} cutoffheight={0} cutoffwidth={75}/>
+              <LineChart linewidth={750} lineheight={250} cutoffheight={0} cutoffwidth={75}/>
             </Box>
           </Box>
           <Box sx={{overflowY: 'scroll'}} gridColumn={matches ? "span 4" : "span 12"} gridRow="span 2">
@@ -77,21 +77,23 @@ const Dashboard = () => {
           <Box sx={{backgroundColor: colors.primary[400]}} gridColumn={matches ? "span 4" : "span 12"} gridRow="span 2" p={2}>
             <Typography variant='h5' sx={{fontWeight: 'bold'}} >Campaign</Typography>
             <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-              <ProgressCircle size={130} progress='0.75'/>
+              <Box mt={4}>
+                <ProgressCircle size={130} progress='0.75'/>
+              </Box>
               <Typography sx={{color: colors.greenAccent[500], mt: '20px'}}>$48,352 revenue generated</Typography>
               <Typography>Includes extra misc expenditures and costs</Typography>
             </Box>
           </Box>
 
           <Box sx={{backgroundColor: colors.primary[400]}} gridColumn={matches ? "span 4" : "span 12"} gridRow="span 2" p={2}>
-            <Typography>Sales Quantity</Typography>
+            <Typography variant='h5' sx={{fontWeight: 'bold'}} >Sales Quantity</Typography>
             <Box height={250}>
               <BarChart barheight={200} barwidth={300}/>
             </Box>
           </Box>
           <Box sx={{backgroundColor: colors.primary[400]}} gridColumn={matches ? "span 4" : "span 12"} gridRow="span 2" p={2}>
-            <Typography>Geography based traffic</Typography>
-            <Box height={200}>
+            <Typography variant='h5' sx={{fontWeight: 'bold'}} >Geography based traffic</Typography>
+            <Box height={200} mt={5}>
               <GeographyChart geowidth={350} geoheight={300} showScale={false} />
             </Box>
           </Box>

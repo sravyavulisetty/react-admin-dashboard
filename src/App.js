@@ -33,7 +33,7 @@ const App = () => {
 					<Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} isToggled={isToggled} toggleSideBar={() => setIsToggled(!isToggled)}/>
           <main className="content" style={{ paddingLeft:  matches && (!isCollapsed ? "250px" : "80px"), transitionDelay: "240ms"}}>
             <Topbar toggleSideBar={() => setIsToggled(!isToggled)}/>
-						<Routes>
+					 <Routes>
            <Route path="/" element={<Dashboard/>}/>
            <Route path="/form" element={<Form />}/>
            <Route path="/team" element={<Team/>}/>
@@ -43,8 +43,8 @@ const App = () => {
            <Route path="/line" element={<Line/>}/>
            <Route path="/pie" element={<Pie/>}/>
            <Route path="/faq" element={<FAQ/>}/>
-             <Route path="/geography" element={<Geography/>}/>
-             <Route path="/calendar" element={<Calendar/>}/>
+           <Route path="/geography" element={<Geography/>}/>
+           <Route path="/calendar" element={<Calendar/>}/>
            </Routes>
           </main>
         </div>

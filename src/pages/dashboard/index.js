@@ -15,6 +15,7 @@ import { mockTransactions } from '../../data/mockData';
 import ProgressCircle from '../../components/ProgressCircle';
 import BarChart from '../../components/BarChart';
 import GeographyChart from '../../components/GeographyChart';
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);

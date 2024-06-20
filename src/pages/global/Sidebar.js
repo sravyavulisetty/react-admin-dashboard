@@ -47,7 +47,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isToggled, toggleSideBar }) => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
 
-	const [selected, setSelected] = useState("Dashboard");
+	const [selected, setSelected] = useState('Dashboard');
 
 	return (
 		<Box

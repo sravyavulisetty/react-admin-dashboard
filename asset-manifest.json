@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/react-admin-dashboard/static/css/main.af268585.css",
-    "main.js": "/react-admin-dashboard/static/js/main.d17e33e6.js",
-    "static/js/453.7f84855b.chunk.js": "/react-admin-dashboard/static/js/453.7f84855b.chunk.js",
-    "static/media/woman-profile-cartoon_18591-58480.avif": "/react-admin-dashboard/static/media/woman-profile-cartoon_18591-58480.03b95003d26ebf08e7f6.avif",
-    "index.html": "/react-admin-dashboard/index.html",
-    "main.af268585.css.map": "/react-admin-dashboard/static/css/main.af268585.css.map",
-    "main.d17e33e6.js.map": "/react-admin-dashboard/static/js/main.d17e33e6.js.map",
-    "453.7f84855b.chunk.js.map": "/react-admin-dashboard/static/js/453.7f84855b.chunk.js.map"
+    "main.css": "/static/css/main.4bd1e9a6.css",
+    "main.js": "/static/js/main.23013883.js",
+    "static/js/453.7f84855b.chunk.js": "/static/js/453.7f84855b.chunk.js",
+    "static/media/woman-profile-cartoon_18591-58480.avif": "/static/media/woman-profile-cartoon_18591-58480.03b95003d26ebf08e7f6.avif",
+    "index.html": "/index.html",
+    "main.4bd1e9a6.css.map": "/static/css/main.4bd1e9a6.css.map",
+    "main.23013883.js.map": "/static/js/main.23013883.js.map",
+    "453.7f84855b.chunk.js.map": "/static/js/453.7f84855b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.af268585.css",
-    "static/js/main.d17e33e6.js"
+    "static/css/main.4bd1e9a6.css",
+    "static/js/main.23013883.js"
   ]
 }

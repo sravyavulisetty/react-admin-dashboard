@@ -5,7 +5,7 @@ import { ColorModeContext, useMode } from "./theme";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Topbar from "./pages/global/Topbar";
 import Sidebar from "./pages/global/Sidebar";
-import Dashboard from '../src/pages/Dashboard/index'
+import Dashboard from './pages/dashboard/index'
 import Team from "../src/pages/team/index";
 import Invoices from "../src/pages/invoices/index";
 import Bar from "../src/pages/bar/index";
